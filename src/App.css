@@ -1,0 +1,33 @@
+.Auth-container {
+  background: url(./assets/images/bg-image.png);
+  background-size: cover;
+}
+
+.overlay {
+  background: linear-gradient(
+    45deg,
+    rgba(47, 140, 96, 0.63),
+    rgba(0, 0, 0, 0.62)
+  );
+}
+
+.sidebar-container .ps-sidebar-container {
+  border-top-right-radius: 50px;
+  background-color: rgba(31, 38, 62, 1);
+  color: #fff;
+  height: 100vh;
+}
+
+.sidebar-container .css-1wvake5 {
+  border-right-width: 0 !important;
+  border-right-style: none !important;
+}
+
+.sidebar-container .ps-sidebar-container .ps-menu-button:hover {
+  background-color: rgba(0, 146, 77, 0.1);
+}
+
+.header-container {
+  background: url(../src/assets/images/header.png) no-repeat;
+  background-size: contain;
+}
