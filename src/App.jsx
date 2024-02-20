@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoot from "./SharedModule/Components/ProtectedRoot/ProtectedRoot";
 import ResetPass from "./AuthModule/Components/ResetPass/ResetPass";
+import ChangePass from "./SharedModule/Components/ChangePass/ChangePass";
 
 function App() {
   const [adminData, setAdminData] = useState(null);
@@ -21,7 +22,6 @@ function App() {
     const encodedToken = localStorage.getItem("adminToken");
     const decodedToken = jwtDecode(encodedToken);
     setAdminData(decodedToken);
-    console.log(decodedToken);
   };
 
   useEffect(() => {
@@ -46,13 +46,13 @@ function App() {
       path: "dashboard",
       element: (
         <ProtectedRoot adminData={adminData}>
-          <MasterLayout adminData={adminData}/>
+          <MasterLayout adminData={adminData} />
         </ProtectedRoot>
       ),
       children: [
         {
           index: true,
-          element: <Home adminData={adminData}/>,
+          element: <Home adminData={adminData} />,
         },
         {
           path: "home",
@@ -69,6 +69,10 @@ function App() {
         {
           path: "categories",
           element: <Categories />,
+        },
+        {
+          path: "change-pass",
+          element: <ChangePass />,
         },
       ],
     },

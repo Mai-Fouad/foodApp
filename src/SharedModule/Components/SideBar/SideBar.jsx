@@ -22,8 +22,8 @@ export default function SideBar() {
         <Menu className="pt-4">
           <MenuItem
             onClick={toggleCollapse}
-            className="text-center mb-2"
-            icon={<img src={sidebarLogo} alt="sidebar logo"/>}
+            className="d-flex justify-content-center mb-2"
+            icon={<img src={sidebarLogo} alt="sidebar logo" />}
           ></MenuItem>
           <MenuItem
             component={<Link to={"/dashboard"} />}
@@ -48,6 +48,12 @@ export default function SideBar() {
             icon={<i className="fa-solid fa-layer-group"></i>}
           >
             Categories
+          </MenuItem>
+          <MenuItem
+            component={<Link to={"/dashboard/change-pass"} />}
+            icon={<i className="fa-solid fa-unlock-keyhole"></i>}
+          >
+            Change Password
           </MenuItem>
           <MenuItem
             onClick={onLogoutHandler}

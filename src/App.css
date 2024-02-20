@@ -10,6 +10,9 @@
     rgba(0, 0, 0, 0.62)
   );
 }
+.sidebar-container {
+  /* position: fixed; */
+}
 
 .sidebar-container .ps-sidebar-container {
   border-top-right-radius: 50px;
