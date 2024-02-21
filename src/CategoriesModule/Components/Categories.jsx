@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { useForm } from "react-hook-form";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../../SharedModule/Components/Header/Header";
 import NoDataFound from "../../SharedModule/Components/NoDataFound/NoDataFound";
@@ -217,7 +217,6 @@ export default function Categories() {
 
   return (
     <>
-      <ToastContainer />
       <Header
         title={"Categories"}
         description={

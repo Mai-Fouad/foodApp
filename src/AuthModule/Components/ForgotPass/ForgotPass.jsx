@@ -1,10 +1,10 @@
 import React from "react";
-import logo from "../../../assets/images/logo.png";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import logo from "../../../assets/images/logo.png";
 
 export default function ForgetPass() {
   const navigate = useNavigate();
@@ -29,7 +29,6 @@ export default function ForgetPass() {
   return (
     <div className="Auth-container vh-100">
       <div className="overlay vh-100 container-fluid">
-        <ToastContainer />
         <div className="row vh-100 justify-content-center align-items-center">
           <div className="col-md-5">
             <div className="login bg-white rounded-3 px-5 py-4">

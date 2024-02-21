@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import sidebarLogo from "../../../assets/images/sidebarLogo.png";
+import ChangePass from "../ChangePass/ChangePass";
+import { Modal } from "react-bootstrap";
 
 export default function SideBar() {
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
+  const handleClose = () => setShow(false);
   const navigate = useNavigate();
 
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -18,6 +23,11 @@ export default function SideBar() {
 
   return (
     <div className="sidebar-container">
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Body>
+          <ChangePass />
+        </Modal.Body>
+      </Modal>
       <Sidebar collapsed={isCollapsed}>
         <Menu className="pt-4">
           <MenuItem
@@ -50,7 +60,7 @@ export default function SideBar() {
             Categories
           </MenuItem>
           <MenuItem
-            component={<Link to={"/dashboard/change-pass"} />}
+            onClick={handleShow}
             icon={<i className="fa-solid fa-unlock-keyhole"></i>}
           >
             Change Password
