@@ -18,7 +18,6 @@ export default function ChangePass() {
   const onSubmitHandler = async (data) => {
     const token = localStorage.getItem("adminToken");
 
-    console.log(data);
     try {
       const response = await axios.put(
         "https://upskilling-egypt.com:443/api/v1/Users/ChangePassword",
@@ -31,7 +30,6 @@ export default function ChangePass() {
       );
       localStorage.removeItem("adminToken");
       navigate("/login");
-      console.log(response, "res");
     } catch (error) {
       toast.error(error.response.data.message);
     }

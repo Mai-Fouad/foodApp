@@ -32,5 +32,33 @@
 
 .header-container {
   background: url(../src/assets/images/header.png) no-repeat;
-  background-size: contain;
+  background-size: cover;
+}
+
+.lightGreenContainer {
+  background-color: #f0ffef;
+}
+
+.container {
+  width: 98% !important;
+}
+
+.uploadImg {
+  border: 2px dashed;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #fff;
+  color: #000;
+  border: 0px;
+  border-right: 1px solid #e5e5e5;
+  padding: 10px 15px;
+  margin-right: 20px;
+  transition: 0.5s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #eee;
+  border: 0px;
+  border-right: 1px solid #e5e5e5;
 }

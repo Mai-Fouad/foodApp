@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "../../SharedModule/Components/Header/Header";
 import NoDataFound from "../../SharedModule/Components/NoDataFound/NoDataFound";
 import noData from "../../assets/images/no-data.png";
+import DeleteModal from "../../SharedModule/Components/DeleteModal/DeleteModal";
 
 export default function Categories() {
   const token = localStorage.getItem("adminToken");
@@ -30,7 +31,6 @@ export default function Categories() {
     setSelectedCategoryName(selectedCategory?.name || "");
   }, [selectedCategory]);
 
-  console.log(selectedCategory?.id);
   const handleShow = (category = null) => {
     setShow(true);
     setSelectedCategory(category);
@@ -112,7 +112,7 @@ export default function Categories() {
       );
       setCategoriesList(response.data.data);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -203,20 +203,20 @@ export default function Categories() {
           on delete it
         </p>
         <div className="d-flex justify-content-end">
-          <Button
+          <button
             className="btn btn-outline-danger"
             onClick={() => deleteCategoryHandler(selectedCategoryId)}
             type="submit"
           >
             Delete this item
-          </Button>
+          </button>
         </div>
       </Modal.Body>
     </Modal>
   );
 
   return (
-    <>
+    <div className="container">
       <Header
         title={"Categories"}
         description={
@@ -226,13 +226,21 @@ export default function Categories() {
 
       {add && !update && addModal}
       {!add && update && updateModal}
-      {!add && !update && deleteModal}
+      {!add && !update && (
+        <DeleteModal
+          url={`https://upskilling-egypt.com:443/api/v1/Category/${selectedCategoryId}`}
+          title={"Category"}
+          getList={getCategoriesList}
+          show={show}
+          handleClose={handleClose}
+        />
+      )}
 
       <div className="categories-container">
         <div className="title-info d-flex justify-content-between align-items-center p-4">
           <div className="title">
-            <h5>Categories Table Details</h5>
-            <h6>You can check all details</h6>
+            <h5 className="lh-1">Categories Table Details</h5>
+            <h6 className="lh-1 text-muted">You can check all details</h6>
           </div>
           <div className="btn-container">
             <Button
@@ -263,26 +271,24 @@ export default function Categories() {
                 <th scope="row">{cat.id}</th>
                 <td>{cat.name}</td>
                 <td>
-                  <Button
+                  <i
+                    className="fa-solid fa-pen-to-square text-warning m-2"
+                    role="button"
                     onClick={() => {
                       handleShow(cat);
                       setUpdate(true);
                       setAdd(false);
                     }}
-                    className="btn btn-warning me-2"
-                  >
-                    Update
-                  </Button>
-                  <Button
+                  ></i>
+                  <i
+                    className="fa-solid fa-trash text-danger"
+                    role="button"
                     onClick={() => {
                       handleShow(cat);
                       setAdd(false);
                       setUpdate(false);
                     }}
-                    className="btn btn-danger"
-                  >
-                    Delete
-                  </Button>
+                  ></i>
                 </td>
               </tr>
             ))}
@@ -291,6 +297,6 @@ export default function Categories() {
       ) : (
         <NoDataFound />
       )}
-    </>
+    </div>
   );
 }

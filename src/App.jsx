@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import ProtectedRoot from "./SharedModule/Components/ProtectedRoot/ProtectedRoot";
 import ResetPass from "./AuthModule/Components/ResetPass/ResetPass";
+import RecipeItemForm from "./RecipesModule/Components/RecipeItemForm/RecipeItemForm";
 
 function App() {
   const [adminData, setAdminData] = useState(null);
@@ -64,6 +65,10 @@ function App() {
         {
           path: "recipes",
           element: <Recipes />,
+        },
+        {
+          path: "recipe-item-form",
+          element: <RecipeItemForm />,
         },
         {
           path: "categories",
