@@ -12,6 +12,8 @@ export default function RecipesList() {
   const [show, setShow] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
+  const [tagsList, setTagsList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
 
   const handleClose = () => {
     setShow(false);
@@ -27,7 +29,17 @@ export default function RecipesList() {
   const navigate = useNavigate();
 
   const navigateToAddForm = () => {
-    navigate("/dashboard/recipe-item-form");
+    navigate("/dashboard/recipe-add-item");
+  };
+
+  const navigateToEditRecipe = (recipe) => {
+    navigate("/dashboard/recipe-edit-form", {
+      state: {
+        selectedRecipe: recipe,
+        tagsList: tagsList,
+        categoriesList: categoriesList,
+      },
+    });
   };
 
   const getRecipesList = async () => {
@@ -46,12 +58,46 @@ export default function RecipesList() {
     }
   };
 
+  const getTagsList = async () => {
+    try {
+      const response = await axios.get(
+        "https://upskilling-egypt.com:443/api/v1/tag/",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setTagsList(response.data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const getCategoriesList = async () => {
+    try {
+      const response = await axios.get(
+        "https://upskilling-egypt.com:443/api/v1/Category/?pageSize=10&pageNumber=1",
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      setCategoriesList(response.data.data);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+
   useEffect(() => {
     setSelectedRecipeId(selectedRecipe?.id || "");
   }, [selectedRecipe]);
 
   useEffect(() => {
     getRecipesList();
+    getTagsList();
+    getCategoriesList();
   }, []);
 
   return (
@@ -140,7 +186,11 @@ export default function RecipesList() {
                         <li className="dropdown-item" role="button">
                           <i className="fa-solid fa-eye text-success"></i> View
                         </li>
-                        <li className="dropdown-item" role="button">
+                        <li
+                          className="dropdown-item"
+                          role="button"
+                          onClick={() => navigateToEditRecipe(recipe)}
+                        >
                           <i className="fa-solid fa-pen-to-square text-warning"></i>{" "}
                           Edit
                         </li>

@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-export default function RecipeItemForm() {
+export default function RecipeAddItem() {
   const token = localStorage.getItem("adminToken");
   const [tagsList, setTagsList] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
@@ -56,7 +56,7 @@ export default function RecipeItemForm() {
           },
         }
       );
-      setTagsList(response.data);
+      setTagsList(response?.data);
     } catch (error) {
       toast.error(error.message);
     }
@@ -72,7 +72,7 @@ export default function RecipeItemForm() {
           },
         }
       );
-      setCategoriesList(response.data.data);
+      setCategoriesList(response?.data?.data);
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -84,7 +84,7 @@ export default function RecipeItemForm() {
   }, []);
 
   return (
-    <div>
+    <>
       <RecipesHeader />
       <div className="container">
         <div className="row">
@@ -184,13 +184,6 @@ export default function RecipeItemForm() {
               <div className="uploadImg border-success lightGreenContainer mt-2 p-3 d-flex flex-column align-items-center">
                 <i className="fa-solid fa-upload mb-2"></i>
                 <input type="file" role="button" {...register("recipeImage")} />
-                {/* <button className="btn w-100" {...register("recipeImage")}>
-                  <p>
-                    Drag & Drop or{" "}
-                    <span className="text-success">Choose a Item Image</span> to
-                    Upload
-                  </p>
-                </button> */}
               </div>
               <div className="d-flex justify-content-end mt-4">
                 <button
@@ -207,6 +200,6 @@ export default function RecipeItemForm() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

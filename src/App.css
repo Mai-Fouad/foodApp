@@ -30,6 +30,10 @@
   background-color: rgba(0, 146, 77, 0.1);
 }
 
+.sidebarLogo {
+  width: 150px;
+}
+
 .header-container {
   background: url(../src/assets/images/header.png) no-repeat;
   background-size: cover;
@@ -61,4 +65,8 @@ input[type="file"]::file-selector-button:hover {
   background-color: #eee;
   border: 0px;
   border-right: 1px solid #e5e5e5;
+}
+
+.selectedImg{
+  width: 100px;
 }

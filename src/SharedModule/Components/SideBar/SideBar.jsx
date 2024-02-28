@@ -11,7 +11,7 @@ export default function SideBar() {
   const handleClose = () => setShow(false);
   const navigate = useNavigate();
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
@@ -32,8 +32,8 @@ export default function SideBar() {
         <Menu className="pt-4">
           <MenuItem
             onClick={toggleCollapse}
-            className="d-flex justify-content-center mb-2"
-            icon={<img src={sidebarLogo} alt="sidebar logo" />}
+            className="d-flex justify-content-center align-items-center mb-2"
+            icon={<img src={sidebarLogo} alt="sidebar logo" className="sidebarLogo"/>}
           ></MenuItem>
           <MenuItem
             component={<Link to={"/dashboard"} />}
