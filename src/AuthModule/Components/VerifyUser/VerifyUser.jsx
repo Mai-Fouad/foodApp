@@ -1,13 +1,14 @@
-import React from "react";
-import logo from "../../../assets/images/logo.png";
-import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import logo from "../../../assets/images/logo.png";
 
-export default function Login({ saveLoginData }) {
+export default function VerifyUser() {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -15,19 +16,15 @@ export default function Login({ saveLoginData }) {
   } = useForm();
 
   const onSubmitHandler = async (data) => {
-    await axios
-      .post("https://upskilling-egypt.com:443/api/v1/Users/Login", data)
-      .then((res) => {
-        localStorage.setItem("loginToken", res.data.token);
-        setTimeout(() => {
-          toast.success("login successfully!");
-        }, 1000);
-        saveLoginData();
-        navigate("/dashboard");
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+      const response = await axios.put(
+        "https://upskilling-egypt.com:443/api/v1/Users/verify",
+        data
+      );
+      navigate("/dashboard");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
 
   return (
@@ -39,9 +36,10 @@ export default function Login({ saveLoginData }) {
               <div className="logo-container text-center">
                 <img src={logo} alt="food-logo" className="w-75 mb-3" />
               </div>
-              <h5>Login</h5>
+              <h4>Verify User</h4>
               <p className="text-muted">
-                Welcome Back! Please enter your details
+                Enter your verification code and enjoy using our food management
+                dashboard.
               </p>
               <form onSubmit={handleSubmit(onSubmitHandler)}>
                 <div className="input-group mb-3">
@@ -66,39 +64,26 @@ export default function Login({ saveLoginData }) {
                     {errors.email.message}
                   </div>
                 )}
+
                 <div className="input-group mb-3">
                   <span className="input-group-text" id="basic-addon1">
-                    <i className="fa fa-key"></i>
+                    <i className="fa fa-envelope"></i>
                   </span>
                   <input
-                    type="password"
+                    type="text"
                     className="form-control"
-                    placeholder="Enter your Password"
-                    {...register("password", {
-                      required: "Password is required",
+                    placeholder="Enter your verification code"
+                    {...register("code", {
+                      required: "Code is required",
                     })}
                   />
                 </div>
-                {errors.password && (
+                {errors.code && (
                   <div className="alert alert-danger">
-                    {errors.password.message}
+                    {errors.code.message}
                   </div>
                 )}
-                <div className="d-flex justify-content-between mb-3">
-                  <Link
-                    to="/register"
-                    className="text-success text-decoration-none"
-                  >
-                    Register Now?
-                  </Link>
-                  <Link
-                    to="/forget-pass"
-                    className="text-success text-decoration-none"
-                  >
-                    Forget Password?
-                  </Link>
-                </div>
-                <button className="btn btn-success w-100">Login</button>
+                <button className="btn btn-success w-100">Submit</button>
               </form>
             </div>
           </div>

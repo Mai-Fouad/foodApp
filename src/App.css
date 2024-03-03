@@ -11,7 +11,7 @@
   );
 }
 .sidebar-container {
-  /* position: fixed; */
+  height: 100vh !important;
 }
 
 .sidebar-container .ps-sidebar-container {
@@ -67,6 +67,6 @@ input[type="file"]::file-selector-button:hover {
   border-right: 1px solid #e5e5e5;
 }
 
-.selectedImg{
+.selectedImg {
   width: 100px;
 }

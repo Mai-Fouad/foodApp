@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Modal } from "react-bootstrap";
+import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import { Link, useNavigate } from "react-router-dom";
 import sidebarLogo from "../../../assets/images/sidebarLogo.png";
 import ChangePass from "../ChangePass/ChangePass";
-import { Modal } from "react-bootstrap";
 
-export default function SideBar() {
+export default function SideBar({ loginData }) {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -17,7 +17,7 @@ export default function SideBar() {
   };
 
   const onLogoutHandler = () => {
-    localStorage.removeItem("adminToken");
+    localStorage.removeItem("loginToken");
     navigate("/login");
   };
 
@@ -33,7 +33,13 @@ export default function SideBar() {
           <MenuItem
             onClick={toggleCollapse}
             className="d-flex justify-content-center align-items-center mb-2"
-            icon={<img src={sidebarLogo} alt="sidebar logo" className="sidebarLogo"/>}
+            icon={
+              <img
+                src={sidebarLogo}
+                alt="sidebar logo"
+                className="sidebarLogo"
+              />
+            }
           ></MenuItem>
           <MenuItem
             component={<Link to={"/dashboard"} />}
@@ -41,24 +47,37 @@ export default function SideBar() {
           >
             Home
           </MenuItem>
-          <MenuItem
-            component={<Link to={"/dashboard/users"} />}
-            icon={<i className="fa-solid fa-users"></i>}
-          >
-            Users
-          </MenuItem>
+          {loginData?.userGroup == "SuperAdmin" && (
+            <MenuItem
+              component={<Link to={"/dashboard/users"} />}
+              icon={<i className="fa-solid fa-users"></i>}
+            >
+              Users
+            </MenuItem>
+          )}
           <MenuItem
             component={<Link to={"/dashboard/recipes"} />}
             icon={<i className="fa-solid fa-book"></i>}
           >
             Recipes
           </MenuItem>
-          <MenuItem
-            component={<Link to={"/dashboard/categories"} />}
-            icon={<i className="fa-solid fa-layer-group"></i>}
-          >
-            Categories
-          </MenuItem>
+          {loginData?.userGroup == "SuperAdmin" && (
+            <MenuItem
+              component={<Link to={"/dashboard/categories"} />}
+              icon={<i className="fa-solid fa-layer-group"></i>}
+            >
+              Categories
+            </MenuItem>
+          )}
+          {loginData?.userGroup == "SystemUser" && (
+            <MenuItem
+              component={<Link to={"/dashboard/favorites"} />}
+              icon={<i className="fa-solid fa-heart"></i>}
+            >
+              Favorites
+            </MenuItem>
+          )}
+
           <MenuItem
             onClick={handleShow}
             icon={<i className="fa-solid fa-unlock-keyhole"></i>}

@@ -12,7 +12,7 @@ export default function DeleteModal({
   show,
   handleClose,
 }) {
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("loginToken");
 
   const deleteHandler = async (item) => {
     try {

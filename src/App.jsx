@@ -15,19 +15,22 @@ import ProtectedRoot from "./SharedModule/Components/ProtectedRoot/ProtectedRoot
 import ResetPass from "./AuthModule/Components/ResetPass/ResetPass";
 import RecipeAddItem from "./RecipesModule/Components/RecipeAddItem/RecipeAddItem";
 import RecipeEditItem from "./RecipesModule/Components/RecipeEditItem/RecipeEditItem";
+import Register from "./AuthModule/Components/Register/Register";
+import VerifyUser from "./AuthModule/Components/VerifyUser/VerifyUser";
+import Favorites from "./FavoriteModule/Components/Favorites";
 
 function App() {
-  const [adminData, setAdminData] = useState(null);
-
-  const saveAdminData = () => {
-    const encodedToken = localStorage.getItem("adminToken");
+  const [loginData, setLoginData] = useState(null);
+  console.log(loginData, "login");
+  const saveLoginData = () => {
+    const encodedToken = localStorage.getItem("loginToken");
     const decodedToken = jwtDecode(encodedToken);
-    setAdminData(decodedToken);
+    setLoginData(decodedToken);
   };
 
   useEffect(() => {
-    if (localStorage.getItem("adminToken")) {
-      saveAdminData();
+    if (localStorage.getItem("loginToken")) {
+      saveLoginData();
     }
   }, []);
 
@@ -37,23 +40,25 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login saveAdminData={saveAdminData} /> },
-        { path: "login", element: <Login saveAdminData={saveAdminData} /> },
+        { index: true, element: <Login saveLoginData={saveLoginData} /> },
+        { path: "login", element: <Login saveLoginData={saveLoginData} /> },
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
+        { path: "register", element: <Register /> },
+        { path: "verify-user", element: <VerifyUser /> },
       ],
     },
     {
       path: "dashboard",
       element: (
-        <ProtectedRoot adminData={adminData}>
-          <MasterLayout adminData={adminData} />
+        <ProtectedRoot loginData={loginData}>
+          <MasterLayout loginData={loginData} />
         </ProtectedRoot>
       ),
       children: [
         {
           index: true,
-          element: <Home adminData={adminData} />,
+          element: <Home loginData={loginData} />,
         },
         {
           path: "home",
@@ -78,6 +83,10 @@ function App() {
         {
           path: "categories",
           element: <Categories />,
+        },
+        {
+          path: "favorites",
+          element: <Favorites />,
         },
       ],
     },

@@ -1,7 +1,7 @@
 import React from "react";
 import avatar from "../../../assets/images/avatar.png";
 
-export default function NavBar({ adminData }) {
+export default function NavBar({ loginData }) {
   return (
     <div className="container bg-light my-2 p-0 rounded-4">
       <nav className="navbar navbar-expand-lg navbar-transparent">
@@ -18,7 +18,7 @@ export default function NavBar({ adminData }) {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <form className="d-flex align-items-center w-75">
+            <form className="d-flex mx-md-auto align-items-center w-75">
               <input
                 className="form-control border-0"
                 type="search"
@@ -33,7 +33,7 @@ export default function NavBar({ adminData }) {
                     <div className="me-2">
                       <img src={avatar} />
                     </div>
-                    <h5>{adminData?.userName}</h5>
+                    <h5>{loginData?.userName}</h5>
                   </div>
                 </a>
               </li>

@@ -11,7 +11,7 @@ import noData from "../../assets/images/no-data.png";
 import DeleteModal from "../../SharedModule/Components/DeleteModal/DeleteModal";
 
 export default function Categories() {
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("loginToken");
   const [categoriesList, setCategoriesList] = useState([]);
   const [add, setAdd] = useState(false);
   const [update, setUpdate] = useState(false);

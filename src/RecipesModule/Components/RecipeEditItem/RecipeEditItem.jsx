@@ -13,7 +13,7 @@ export default function RecipeEditItem() {
   );
   const { tagsList, categoriesList } = location.state;
   const [isImageChanged, setIsImageChanged] = useState(false);
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("loginToken");
   const {
     register,
     handleSubmit,

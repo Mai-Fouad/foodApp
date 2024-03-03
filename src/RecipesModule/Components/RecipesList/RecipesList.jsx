@@ -25,7 +25,7 @@ export default function RecipesList() {
     setSelectedRecipe(recipe);
   };
 
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("loginToken");
   const navigate = useNavigate();
 
   const navigateToAddForm = () => {

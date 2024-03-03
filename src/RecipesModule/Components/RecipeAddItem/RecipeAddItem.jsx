@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export default function RecipeAddItem() {
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("loginToken");
   const [tagsList, setTagsList] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
   const navigate = useNavigate();

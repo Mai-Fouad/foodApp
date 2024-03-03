@@ -4,16 +4,16 @@ import SideBar from "../SideBar/SideBar";
 import NavBar from "../NavBar/NavBar";
 import { ToastContainer } from "react-toastify";
 
-export default function MasterLayout({adminData}) {
+export default function MasterLayout({ loginData }) {
   return (
     <div className="container-fluid p-0">
       <ToastContainer />
       <div className="d-flex">
         <div>
-          <SideBar />
+          <SideBar loginData={loginData} />
         </div>
         <div className="w-100">
-          <NavBar adminData={adminData}/>
+          <NavBar loginData={loginData} />
           <Outlet />
         </div>
       </div>

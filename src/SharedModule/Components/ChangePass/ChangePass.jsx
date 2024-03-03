@@ -16,7 +16,7 @@ export default function ChangePass() {
   } = useForm();
 
   const onSubmitHandler = async (data) => {
-    const token = localStorage.getItem("adminToken");
+    const token = localStorage.getItem("loginToken");
 
     try {
       const response = await axios.put(
@@ -28,7 +28,7 @@ export default function ChangePass() {
           },
         }
       );
-      localStorage.removeItem("adminToken");
+      localStorage.removeItem("loginToken");
       navigate("/login");
     } catch (error) {
       toast.error(error.response.data.message);

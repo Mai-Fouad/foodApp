@@ -7,7 +7,7 @@ import NoDataFound from "../../../SharedModule/Components/NoDataFound/NoDataFoun
 export default function Users() {
   const [usersList, setUsersList] = useState();
 
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("loginToken");
 
   const getUsersList = async () => {
     try {
