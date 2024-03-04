@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function RecipesHeader({ home, edit }) {
+export default function RecipesHeader({ home, edit, loginData }) {
   const navigate = useNavigate();
+  const systemUser = loginData?.userGroup === "SystemUser";
 
   const navigateToRecipes = () => {
     navigate("/dashboard/recipes");
@@ -13,7 +14,7 @@ export default function RecipesHeader({ home, edit }) {
       <div className="row justify-content-between align-items-center ps-4">
         <div className="col-md-6">
           <h5>
-            {edit ? "Edit" : "Fill"} the{" "}
+            {systemUser ? "Show" : edit ? "Edit" : "Fill "} the{" "}
             <span className="text-success">Recipes</span> !
           </h5>
           <p className="text-muted lh-sm">
@@ -23,7 +24,7 @@ export default function RecipesHeader({ home, edit }) {
         </div>
         <div className="col-md-3 d-flex justify-content-end">
           <button className="btn btn-success px-5" onClick={navigateToRecipes}>
-            {home ? "Fill" : "All"} Recipes{" "}
+            {systemUser ? "" : home ? "Fill" : "All"} Recipes{" "}
             <i className="fa-solid fa-arrow-right-long"></i>
           </button>
         </div>

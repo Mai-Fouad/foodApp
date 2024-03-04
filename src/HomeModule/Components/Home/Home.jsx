@@ -12,7 +12,7 @@ export default function Home({ loginData }) {
         }
         home
       />
-      <RecipesHeader home />
+      <RecipesHeader home loginData={loginData} />
     </div>
   );
 }

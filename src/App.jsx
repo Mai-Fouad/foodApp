@@ -25,6 +25,7 @@ function App() {
   const saveLoginData = () => {
     const encodedToken = localStorage.getItem("loginToken");
     const decodedToken = jwtDecode(encodedToken);
+    console.log(decodedToken);
     setLoginData(decodedToken);
   };
 
@@ -70,7 +71,7 @@ function App() {
         },
         {
           path: "recipes",
-          element: <Recipes />,
+          element: <Recipes loginData={loginData} />,
         },
         {
           path: "recipe-add-item",

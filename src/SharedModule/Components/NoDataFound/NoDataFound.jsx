@@ -3,13 +3,12 @@ import noData from "../../../assets/images/no-data.png";
 
 export default function NoDataFound() {
   return (
-    <div className="text-center my-2">
-      <img src={noData} />
+    <div className="text-center my-3">
+      <div className="w-25 mx-auto">
+        <img src={noData} className="w-75" />
+      </div>
       <h5 className="mt-2">No Data !</h5>
-      <p className="text-muted">
-        are you sure you want to delete this item? if you are sure just click
-        on delete it
-      </p>
+      <p className="text-muted">there is no data available now!</p>
     </div>
   );
 }

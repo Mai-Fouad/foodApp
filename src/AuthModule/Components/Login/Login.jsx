@@ -15,6 +15,7 @@ export default function Login({ saveLoginData }) {
   } = useForm();
 
   const onSubmitHandler = async (data) => {
+    console.log(data, 'loin');
     await axios
       .post("https://upskilling-egypt.com:443/api/v1/Users/Login", data)
       .then((res) => {

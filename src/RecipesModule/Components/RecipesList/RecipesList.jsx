@@ -3,25 +3,33 @@ import Header from "../../../SharedModule/Components/Header/Header";
 import NoDataFound from "../../../SharedModule/Components/NoDataFound/NoDataFound";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DeleteModal from "../../../SharedModule/Components/DeleteModal/DeleteModal";
+import img from "../../../assets/images/headerImg.png";
 
-export default function RecipesList() {
+export default function RecipesList({ loginData }) {
   const [recipesList, setRecipesList] = useState([]);
   const [show, setShow] = useState(false);
+  const [showFav, setShowFav] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [selectedRecipeId, setSelectedRecipeId] = useState(0);
   const [tagsList, setTagsList] = useState([]);
   const [categoriesList, setCategoriesList] = useState([]);
+  const [searchName, setSearchName] = useState("");
+  const [selectedTagId, setSelectedTagId] = useState(0);
+  const [selectedCatId, setSelectedCatId] = useState(0);
+  const [pagesArray, setPagesArray] = useState([]);
 
   const handleClose = () => {
     setShow(false);
+    setShowFav(false);
     setSelectedRecipe(null);
   };
 
   const handleShow = (recipe) => {
     setShow(true);
+    setShowFav(true);
     setSelectedRecipe(recipe);
   };
 
@@ -42,15 +50,29 @@ export default function RecipesList() {
     });
   };
 
-  const getRecipesList = async () => {
+  const getRecipesList = async (pageNo, pageSize, name, tagId, catId) => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Recipe/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com:443/api/v1/Recipe/",
+        {
+          params: {
+            pageNumber: pageNo,
+            pageSize: pageSize,
+            name: name,
+            tagId: tagId,
+            categoryId: catId,
+          },
+        },
         {
           headers: {
             Authorization: token,
           },
         }
+      );
+      setPagesArray(
+        Array(response?.data?.totalNumberOfPages)
+          .fill()
+          .map((_, i) => i + 1)
       );
       setRecipesList(response.data.data);
     } catch (error) {
@@ -90,12 +112,71 @@ export default function RecipesList() {
     }
   };
 
+  const addToFavorite = async (recipeId) => {
+    console.log(recipeId, "id");
+    try {
+      const response = await axios.post(
+        `https://upskilling-egypt.com:443/api/v1/userRecipe/`,
+        { recipeId: recipeId },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      handleClose();
+      toast.success("Recipe has been added to favorites!");
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
+  const addToFavoriteModal = (
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton className="flex-column-reverse">
+        <div className="d-flex flex-column justify-content-center align-items-center">
+          <img src={img} className="w-50" />
+          <Modal.Title>Add To Favorite</Modal.Title>
+        </div>
+      </Modal.Header>
+      <Modal.Body>
+        <p className="text-muted text-center">
+          are you sure you want to add this item to favorites? if you are sure
+          just click on add.
+        </p>
+        <div className="d-flex justify-content-end">
+          <button
+            className="btn btn-outline-success"
+            onClick={() => addToFavorite(selectedRecipeId)}
+            type="submit"
+          >
+            Add
+          </button>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+
+  const getNameValue = (e) => {
+    setSearchName(e.target.value);
+    getRecipesList(1, 5, e.target.value, selectedTagId, selectedCatId);
+  };
+
+  const getTagIdValue = (e) => {
+    setSelectedTagId(e.target.value);
+    getRecipesList(1, 5, searchName, e.target.value, selectedCatId);
+  };
+  const getCatIdValue = (e) => {
+    setSelectedCatId(e.target.value);
+    getRecipesList(1, 10, searchName, selectedTagId, e.target.value);
+  };
+
   useEffect(() => {
     setSelectedRecipeId(selectedRecipe?.id || "");
   }, [selectedRecipe]);
 
   useEffect(() => {
-    getRecipesList();
+    getRecipesList(1, 5);
     getTagsList();
     getCategoriesList();
   }, []);
@@ -109,7 +190,69 @@ export default function RecipesList() {
         }
       />
 
-      {show && (
+      {loginData?.userGroup == "SuperAdmin" && (
+        <div className="categories-container">
+          <div className="title-info d-flex justify-content-between align-items-center p-4">
+            <div className="title">
+              <h5 className="lh-1">Recipes Table Details</h5>
+              <h6 className="lh-1 text-muted">You can check all details</h6>
+            </div>
+            <div className="btn-container">
+              <Button
+                className="btn btn-success px-5 text-capitalize"
+                onClick={navigateToAddForm}
+              >
+                Add new Item
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="row my-3">
+        <div className="col-md-6">
+          <div className="input-group mb-3">
+            <span className="input-group-text border-end-0 bg-transparent">
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input
+              type="text"
+              className="form-control border-start-0"
+              placeholder="Search"
+              onChange={getNameValue}
+            />
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="input-group mb-3">
+            <select className="form-select" onChange={getTagIdValue}>
+              <option selected>Search by Tag</option>
+              {tagsList?.length > 0 &&
+                tagsList?.map((tag) => (
+                  <option key={tag?.id} value={tag?.id}>
+                    {tag?.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
+        <div className="col-md-3">
+          <div className="input-group mb-3">
+            <select className="form-select" onChange={getCatIdValue}>
+              <option selected>Search by Category</option>
+              {categoriesList?.length > 0 &&
+                categoriesList?.map((cat) => (
+                  <option key={cat?.id} value={cat?.id}>
+                    {cat?.name}
+                  </option>
+                ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {show && showFav && addToFavoriteModal}
+      {show && !showFav && (
         <DeleteModal
           url={`https://upskilling-egypt.com:443/api/v1/Recipe/${selectedRecipeId}`}
           title={"Recipe"}
@@ -118,23 +261,6 @@ export default function RecipesList() {
           handleClose={handleClose}
         />
       )}
-
-      <div className="categories-container">
-        <div className="title-info d-flex justify-content-between align-items-center p-4">
-          <div className="title">
-            <h5 className="lh-1">Recipes Table Details</h5>
-            <h6 className="lh-1 text-muted">You can check all details</h6>
-          </div>
-          <div className="btn-container">
-            <Button
-              className="btn btn-success px-5 text-capitalize"
-              onClick={navigateToAddForm}
-            >
-              Add new Item
-            </Button>
-          </div>
-        </div>
-      </div>
 
       {recipesList?.length > 0 ? (
         <div className="table-responsive">
@@ -186,24 +312,40 @@ export default function RecipesList() {
                         <li className="dropdown-item" role="button">
                           <i className="fa-solid fa-eye text-success"></i> View
                         </li>
-                        <li
-                          className="dropdown-item"
-                          role="button"
-                          onClick={() => navigateToEditRecipe(recipe)}
-                        >
-                          <i className="fa-solid fa-pen-to-square text-warning"></i>{" "}
-                          Edit
-                        </li>
-                        <li
-                          onClick={() => {
-                            handleShow(recipe);
-                          }}
-                          className="dropdown-item"
-                          role="button"
-                        >
-                          <i className="fa-solid fa-trash text-danger"></i>{" "}
-                          Delete
-                        </li>
+                        {loginData?.userGroup == "SuperAdmin" && (
+                          <>
+                            <li
+                              className="dropdown-item"
+                              role="button"
+                              onClick={() => navigateToEditRecipe(recipe)}
+                            >
+                              <i className="fa-solid fa-pen-to-square text-warning"></i>{" "}
+                              Edit
+                            </li>
+                            <li
+                              onClick={() => {
+                                handleShow(recipe);
+                              }}
+                              className="dropdown-item"
+                              role="button"
+                            >
+                              <i className="fa-solid fa-trash text-danger"></i>{" "}
+                              Delete
+                            </li>
+                          </>
+                        )}
+                        {loginData?.userGroup == "SystemUser" && (
+                          <li
+                            onClick={() => {
+                              handleShow(recipe);
+                            }}
+                            className="dropdown-item"
+                            role="button"
+                          >
+                            <i className="fa-regular fa-heart text-danger"></i>{" "}
+                            Favorite
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </td>
@@ -211,6 +353,32 @@ export default function RecipesList() {
               ))}
             </tbody>
           </table>
+          <div className="d-flex justify-content-end">
+            <nav aria-label="Page navigation example">
+              <ul className="pagination">
+                <li className="page-item">
+                  <a className="page-link" href="#">
+                    Previous
+                  </a>
+                </li>
+                {pagesArray?.map((pageNo) => (
+                  <li
+                    className="page-item"
+                    role="button"
+                    key={pageNo}
+                    onClick={() => getRecipesList(pageNo, 5)}
+                  >
+                    <a className="page-link">{pageNo}</a>
+                  </li>
+                ))}
+                <li className="page-item">
+                  <a className="page-link" href="#">
+                    Next
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       ) : (
         <NoDataFound />
