@@ -1,33 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../assets/images/logo.png";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { userURLs } from "../../../lib/APIs";
+import { passwordValidation } from "../../../lib/InputsValidator";
 
 export default function ChangePass() {
+  const { changePassAPI } = userURLs;
+
+  // const [showPass, setShowPass] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+  const toggleShowOldPassword = () => setShowOldPassword((prev) => !prev);
+
+  const toggleShowNewPassword = () => setShowNewPassword((prev) => !prev);
+
+  const toggleShowConfirmNewPassword = () =>
+    setShowConfirmNewPassword((prev) => !prev);
+
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+
+  const password = watch("newPassword");
+
+  const showPasswordHandler = () => {
+    setShowPass(!showPass);
+  };
 
   const onSubmitHandler = async (data) => {
     const token = localStorage.getItem("loginToken");
 
     try {
-      const response = await axios.put(
-        "https://upskilling-egypt.com:443/api/v1/Users/ChangePassword",
-        data,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      const response = await axios.put(changePassAPI, data, {
+        headers: {
+          Authorization: token,
+        },
+      });
       localStorage.removeItem("loginToken");
       navigate("/login");
     } catch (error) {
@@ -47,17 +66,25 @@ export default function ChangePass() {
             <p className="text-muted">Enter your details below</p>
             <form onSubmit={handleSubmit(onSubmitHandler)}>
               <div className="input-group mb-3">
-                <span className="input-group-text" id="basic-addon1">
+                <span className="input-group-text">
                   <i className="fa fa-key"></i>
                 </span>
                 <input
-                  type="password"
+                  id="odPassword"
+                  type={showOldPassword ? "text" : "password"}
                   className="form-control"
                   placeholder="Old Password"
-                  {...register("oldPassword", {
-                    required: "oldPassword is required",
-                  })}
+                  {...register("oldPassword", passwordValidation)}
                 />
+                <span className="input-group-text">
+                  <i
+                    className={`fa-regular fa-eye${
+                      !showOldPassword ? "-slash" : ""
+                    }`}
+                    role="button"
+                    onClick={toggleShowOldPassword}
+                  ></i>
+                </span>
               </div>
               {errors.oldPassword && (
                 <div className="alert alert-danger">
@@ -65,17 +92,25 @@ export default function ChangePass() {
                 </div>
               )}
               <div className="input-group mb-3">
-                <span className="input-group-text" id="basic-addon1">
+                <span className="input-group-text">
                   <i className="fa fa-key"></i>
                 </span>
                 <input
-                  type="password"
+                  id="newPassword"
+                  type={showNewPassword ? "text" : "password"}
                   className="form-control"
                   placeholder="New Password"
-                  {...register("newPassword", {
-                    required: "newPassword is required",
-                  })}
+                  {...register("newPassword", passwordValidation)}
                 />
+                <span className="input-group-text">
+                  <i
+                    className={`fa-regular fa-eye${
+                      !showNewPassword ? "-slash" : ""
+                    }`}
+                    role="button"
+                    onClick={toggleShowNewPassword}
+                  ></i>
+                </span>
               </div>
               {errors.newPassword && (
                 <div className="alert alert-danger">
@@ -83,17 +118,29 @@ export default function ChangePass() {
                 </div>
               )}
               <div className="input-group mb-3">
-                <span className="input-group-text" id="basic-addon1">
+                <span className="input-group-text">
                   <i className="fa fa-key"></i>
                 </span>
                 <input
-                  type="password"
+                  id="confirmNewPassword"
+                  type={showConfirmNewPassword ? "text" : "password"}
                   className="form-control"
                   placeholder="Confirm New Password"
                   {...register("confirmNewPassword", {
-                    required: "confirmNewPassword is required",
+                    required: "Confirm new password is required",
+                    validate: (value) =>
+                      value === password || "The passwords do not match",
                   })}
                 />
+                <span className="input-group-text">
+                  <i
+                    className={`fa-regular fa-eye${
+                      !showConfirmNewPassword ? "-slash" : ""
+                    }`}
+                    role="button"
+                    onClick={toggleShowConfirmNewPassword}
+                  ></i>
+                </span>
               </div>
               {errors.confirmNewPassword && (
                 <div className="alert alert-danger">

@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../assets/images/logo.png";
+import { userURLs } from "../../../lib/APIs";
+import { emailValidation } from "../../../lib/InputsValidator";
 
 export default function VerifyUser() {
+  const { verifyUserAPI } = userURLs;
+
   const navigate = useNavigate();
 
   const {
@@ -17,10 +21,7 @@ export default function VerifyUser() {
 
   const onSubmitHandler = async (data) => {
     try {
-      const response = await axios.put(
-        "https://upskilling-egypt.com:443/api/v1/Users/verify",
-        data
-      );
+      const response = await axios.put(verifyUserAPI, data);
       navigate("/dashboard");
     } catch (error) {
       toast.error(error.response.data.message);
@@ -50,13 +51,7 @@ export default function VerifyUser() {
                     type="email"
                     className="form-control"
                     placeholder="Enter your E-mail"
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: "^[^@]+@[^@]+.[^@]+$",
-                        message: "Email not valid",
-                      },
-                    })}
+                    {...register("email", emailValidation)}
                   />
                 </div>
                 {errors.email && (

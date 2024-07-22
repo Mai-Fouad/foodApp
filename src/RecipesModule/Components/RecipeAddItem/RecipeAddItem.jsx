@@ -32,7 +32,7 @@ export default function RecipeAddItem() {
     const convertedData = convertToFormData(data);
     try {
       const response = await axios.post(
-        "https://upskilling-egypt.com:443/api/v1/Recipe/",
+        "https://upskilling-egypt.com:3006/api/v1/Recipe/",
         convertedData,
         {
           headers: {
@@ -49,7 +49,7 @@ export default function RecipeAddItem() {
   const getTagsList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/tag/",
+        "https://upskilling-egypt.com:3006/api/v1/tag/",
         {
           headers: {
             Authorization: token,
@@ -65,7 +65,7 @@ export default function RecipeAddItem() {
   const getCategoriesList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Category/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
         {
           headers: {
             Authorization: token,

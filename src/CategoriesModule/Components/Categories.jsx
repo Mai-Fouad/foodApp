@@ -45,7 +45,7 @@ export default function Categories() {
   const addCategoryHandler = async (data) => {
     try {
       const response = await axios.post(
-        "https://upskilling-egypt.com:443/api/v1/Category/",
+        "https://upskilling-egypt.com:3006/api/v1/Category/",
         data,
         {
           headers: {
@@ -64,7 +64,7 @@ export default function Categories() {
     const { id } = cat;
     try {
       const response = await axios.put(
-        `https://upskilling-egypt.com:443/api/v1/Category/${id}`,
+        `https://upskilling-egypt.com:3006/api/v1/Category/${id}`,
         {
           name: selectedCategoryName,
         },
@@ -85,7 +85,7 @@ export default function Categories() {
   const deleteCategoryHandler = async (cat) => {
     try {
       const response = await axios.delete(
-        `https://upskilling-egypt.com:443/api/v1/Category/${selectedCategoryId}`,
+        `https://upskilling-egypt.com:3006/api/v1/Category/${selectedCategoryId}`,
         {
           headers: {
             Authorization: token,
@@ -103,7 +103,7 @@ export default function Categories() {
   const getCategoriesList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Category/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
         {
           headers: {
             Authorization: token,
@@ -132,12 +132,7 @@ export default function Categories() {
               type="text"
               className="form-control"
               placeholder="Category Name"
-              {...register("name", {
-                required: "Category name is required",
-                pattern: {
-                  message: "Category name not valid",
-                },
-              })}
+              {...register("name")}
             />
           </div>
           {errors.name && (
@@ -228,7 +223,7 @@ export default function Categories() {
       {!add && update && updateModal}
       {!add && !update && (
         <DeleteModal
-          url={`https://upskilling-egypt.com:443/api/v1/Category/${selectedCategoryId}`}
+          url={`https://upskilling-egypt.com:3006/api/v1/Category/${selectedCategoryId}`}
           title={"Category"}
           getList={getCategoriesList}
           show={show}

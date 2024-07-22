@@ -23,11 +23,21 @@ export default function RecipesList({ loginData }) {
 
   const handleClose = () => {
     setShow(false);
-    setShowFav(false);
     setSelectedRecipe(null);
   };
 
   const handleShow = (recipe) => {
+    setShow(true);
+    setSelectedRecipe(recipe);
+  };
+
+  const handleFavClose = (recipe) => {
+    setShow(false);
+    setShowFav(false);
+    setSelectedRecipe(null);
+  };
+
+  const handleFavShow = (recipe) => {
     setShow(true);
     setShowFav(true);
     setSelectedRecipe(recipe);
@@ -53,7 +63,7 @@ export default function RecipesList({ loginData }) {
   const getRecipesList = async (pageNo, pageSize, name, tagId, catId) => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Recipe/",
+        "https://upskilling-egypt.com:3006/api/v1/Recipe/",
         {
           params: {
             pageNumber: pageNo,
@@ -83,7 +93,7 @@ export default function RecipesList({ loginData }) {
   const getTagsList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/tag/",
+        "https://upskilling-egypt.com:3006/api/v1/tag/",
         {
           headers: {
             Authorization: token,
@@ -99,7 +109,7 @@ export default function RecipesList({ loginData }) {
   const getCategoriesList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Category/?pageSize=10&pageNumber=1",
+        "https://upskilling-egypt.com:3006/api/v1/Category/?pageSize=10&pageNumber=1",
         {
           headers: {
             Authorization: token,
@@ -116,7 +126,7 @@ export default function RecipesList({ loginData }) {
     console.log(recipeId, "id");
     try {
       const response = await axios.post(
-        `https://upskilling-egypt.com:443/api/v1/userRecipe/`,
+        `https://upskilling-egypt.com:3006/api/v1/userRecipe/`,
         { recipeId: recipeId },
         {
           headers: {
@@ -124,7 +134,7 @@ export default function RecipesList({ loginData }) {
           },
         }
       );
-      handleClose();
+      handleFavClose();
       toast.success("Recipe has been added to favorites!");
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -132,7 +142,7 @@ export default function RecipesList({ loginData }) {
   };
 
   const addToFavoriteModal = (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleFavClose}>
       <Modal.Header closeButton className="flex-column-reverse">
         <div className="d-flex flex-column justify-content-center align-items-center">
           <img src={img} className="w-50" />
@@ -251,16 +261,17 @@ export default function RecipesList({ loginData }) {
         </div>
       </div>
 
-      {show && showFav && addToFavoriteModal}
       {show && !showFav && (
         <DeleteModal
-          url={`https://upskilling-egypt.com:443/api/v1/Recipe/${selectedRecipeId}`}
+          url={`https://upskilling-egypt.com:3006/api/v1/Recipe/${selectedRecipeId}`}
           title={"Recipe"}
           getList={getRecipesList}
           show={show}
           handleClose={handleClose}
         />
       )}
+
+      {show && showFav && addToFavoriteModal}
 
       {recipesList?.length > 0 ? (
         <div className="table-responsive">
@@ -286,7 +297,7 @@ export default function RecipesList({ loginData }) {
                     <img
                       src={
                         recipe.imagePath
-                          ? `https://upskilling-egypt.com:443/${recipe.imagePath}`
+                          ? `https://upskilling-egypt.com:3006/${recipe.imagePath}`
                           : ""
                       }
                       className="w-25"
@@ -337,7 +348,7 @@ export default function RecipesList({ loginData }) {
                         {loginData?.userGroup == "SystemUser" && (
                           <li
                             onClick={() => {
-                              handleShow(recipe);
+                              handleFavShow(recipe);
                             }}
                             className="dropdown-item"
                             role="button"

@@ -5,15 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import sidebarLogo from "../../../assets/images/sidebarLogo.png";
 import ChangePass from "../ChangePass/ChangePass";
 
-export default function SideBar({ loginData }) {
+export default function SideBar({ loginData, setCollapsed }) {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
   const navigate = useNavigate();
 
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
+    setCollapsed(isCollapsed);
   };
 
   const onLogoutHandler = () => {

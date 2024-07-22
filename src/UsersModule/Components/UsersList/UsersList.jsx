@@ -15,7 +15,7 @@ export default function Users() {
   const getUsersList = async (pageNo, pageSize, userName, groupValue) => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/Users/",
+        "https://upskilling-egypt.com:3006/api/v1/Users/",
         {
           headers: {
             Authorization: token,
@@ -24,7 +24,7 @@ export default function Users() {
             pageNumber: pageNo,
             pageSize: pageSize,
             userName: userName,
-            groups: [groupValue],
+            groups: groupValue,
           },
         }
       );
@@ -89,7 +89,7 @@ export default function Users() {
               <option selected disabled>
                 Search by Role
               </option>
-              <option value="">All Roles</option>
+              <option value={""}>All Roles</option>
               <option value={1}>Admin</option>
               <option value={2}>User</option>
             </select>
@@ -118,7 +118,7 @@ export default function Users() {
                     <img
                       src={
                         user.imagePath
-                          ? `https://upskilling-egypt.com:443/${user.imagePath}`
+                          ? `https://upskilling-egypt.com:3006/${user.imagePath}`
                           : ""
                       }
                       className="w-25"
@@ -144,12 +144,12 @@ export default function Users() {
                             View
                           </a>
                         </li>
-                        <li>
+                        {/* <li>
                           <a className="dropdown-item text-danger" href="#">
                             <i className="fa-solid fa-trash text-danger"></i>{" "}
                             Delete
                           </a>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </td>

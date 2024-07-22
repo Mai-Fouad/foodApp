@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "../../../assets/images/logo.png";
+import { userURLs } from "../../../lib/APIs";
 
 export default function ForgetPass() {
+  const { forgetPassAPI } = userURLs;
+
   const navigate = useNavigate();
 
   const {
@@ -17,7 +20,7 @@ export default function ForgetPass() {
 
   const onSubmitHandler = (data) => {
     axios
-      .post("https://upskilling-egypt.com:443/api/v1/Users/Reset/Request", data)
+      .post(forgetPassAPI, data)
       .then((res) => {
         navigate("/reset-pass");
       })
@@ -52,7 +55,7 @@ export default function ForgetPass() {
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
-                        value: "^[^@]+@[^@]+.[^@]+$",
+                        value: /^[^@ ]+@[^@ ]+\.[^@ .]{2.}+$/,
                         message: "Email not valid",
                       },
                     })}

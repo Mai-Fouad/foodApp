@@ -1,22 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../../assets/images/logo.png";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { userURLs } from "../../../lib/APIs";
+import {
+  OTPValidation,
+  emailValidation,
+  passwordValidation,
+} from "../../../lib/InputsValidator";
 
 export default function ResetPass() {
+  const { resetPassAPI } = userURLs;
+
+  const [showPass, setShowPass] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+
+  const password = watch("password");
+
+  const showPasswordHandler = () => {
+    setShowPass(!showPass);
+  };
 
   const onSubmitHandler = async (data) => {
     await axios
-      .post("https://upskilling-egypt.com:443/api/v1/Users/Reset", data)
+      .post(resetPassAPI, data)
       .then((res) => {
         setTimeout(() => {
           toast.success("Try your new password!");
@@ -37,26 +57,20 @@ export default function ResetPass() {
               <div className="logo-container text-center">
                 <img src={logo} alt="food-logo" className="w-75 mb-3" />
               </div>
-              <h5> Reset Password</h5>
+              <h5>Reset Password</h5>
               <p className="text-muted">
                 Please Enter Your Otp or Check Your Inbox
               </p>
               <form onSubmit={handleSubmit(onSubmitHandler)}>
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text">
                     <i className="fa fa-envelope"></i>
                   </span>
                   <input
                     type="email"
                     className="form-control"
                     placeholder="Email"
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: "^[^@]+@[^@]+.[^@]+$",
-                        message: "Email not valid",
-                      },
-                    })}
+                    {...register("email", emailValidation)}
                   />
                 </div>
                 {errors.email && (
@@ -65,16 +79,14 @@ export default function ResetPass() {
                   </div>
                 )}
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text">
                     <i className="fa fa-envelope"></i>
                   </span>
                   <input
                     type="text"
                     className="form-control"
                     placeholder="OTP"
-                    {...register("seed", {
-                      required: "OTP is required",
-                    })}
+                    {...register("seed", OTPValidation)}
                   />
                 </div>
                 {errors.seed && (
@@ -83,17 +95,22 @@ export default function ResetPass() {
                   </div>
                 )}
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text">
                     <i className="fa fa-key"></i>
                   </span>
                   <input
-                    type="password"
+                    type={showPass["password"] ? "text" : "password"}
                     className="form-control"
                     placeholder="New Password"
-                    {...register("password", {
-                      required: "Password is required",
-                    })}
+                    {...register("password", passwordValidation)}
                   />
+                  <span className="input-group-text">
+                    <i
+                      className={`fa-regular fa-eye${showPass ? "-slash" : ""}`}
+                      role="button"
+                      onClick={showPasswordHandler}
+                    ></i>
+                  </span>
                 </div>
                 {errors.password && (
                   <div className="alert alert-danger py-1">
@@ -101,17 +118,27 @@ export default function ResetPass() {
                   </div>
                 )}
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text">
                     <i className="fa fa-key"></i>
                   </span>
                   <input
-                    type="password"
+                    type={showPass["confirmPassword"] ? "text" : "password"}
                     className="form-control"
                     placeholder="Confirm New Password"
                     {...register("confirmPassword", {
-                      required: "Confirm Password is required",
+                      ...passwordValidation,
+                      validate: (value) =>
+                        value === password ||
+                        "New password does not match confirm password",
                     })}
                   />
+                  <span className="input-group-text">
+                    <i
+                      className={`fa-regular fa-eye${showPass ? "-slash" : ""}`}
+                      role="button"
+                      onClick={showPasswordHandler}
+                    ></i>
+                  </span>
                 </div>
                 {errors.confirmPassword && (
                   <div className="alert alert-danger py-1">

@@ -26,7 +26,7 @@ export default function Favorites() {
   const getFavList = async () => {
     try {
       const response = await axios.get(
-        "https://upskilling-egypt.com:443/api/v1/userRecipe/",
+        "https://upskilling-egypt.com:3006/api/v1/userRecipe/",
         {
           headers: {
             Authorization: token,
@@ -42,7 +42,7 @@ export default function Favorites() {
   const removeFromFav = async (favId) => {
     try {
       const response = await axios.delete(
-        `https://upskilling-egypt.com:443/api/v1/userRecipe/${favId}`,
+        `https://upskilling-egypt.com:3006/api/v1/userRecipe/${favId}`,
         {
           headers: {
             Authorization: token,
@@ -112,7 +112,7 @@ export default function Favorites() {
                   className="card-img-top"
                   src={
                     fav?.recipe?.imagePath
-                      ? `https://upskilling-egypt.com:443/${fav?.recipe?.imagePath}`
+                      ? `https://upskilling-egypt.com:3006/${fav?.recipe?.imagePath}`
                       : noImg
                   }
                   alt="Card image cap"

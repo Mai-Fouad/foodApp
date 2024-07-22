@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../../assets/images/logo.png";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { userURLs } from "../../../lib/APIs";
+import {
+  emailValidation,
+  passwordValidation,
+} from "../../../lib/InputsValidator";
 
 export default function Login({ saveLoginData }) {
+  const { loginAPI } = userURLs;
+
+  const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
   const {
     register,
@@ -14,10 +22,14 @@ export default function Login({ saveLoginData }) {
     formState: { errors },
   } = useForm();
 
+  const showPasswordHandler = () => {
+    setShowPass(!showPass);
+  };
+
   const onSubmitHandler = async (data) => {
-    console.log(data, 'loin');
+    console.log(data, "loin");
     await axios
-      .post("https://upskilling-egypt.com:443/api/v1/Users/Login", data)
+      .post("https://upskilling-egypt.com:3006/api/v1/Users/Login", data)
       .then((res) => {
         localStorage.setItem("loginToken", res.data.token);
         setTimeout(() => {
@@ -46,20 +58,14 @@ export default function Login({ saveLoginData }) {
               </p>
               <form onSubmit={handleSubmit(onSubmitHandler)}>
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text">
                     <i className="fa fa-envelope"></i>
                   </span>
                   <input
                     type="email"
                     className="form-control"
                     placeholder="Enter your E-mail"
-                    {...register("email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: "^[^@]+@[^@]+.[^@]+$",
-                        message: "Email not valid",
-                      },
-                    })}
+                    {...register("email", emailValidation)}
                   />
                 </div>
                 {errors.email && (
@@ -68,17 +74,24 @@ export default function Login({ saveLoginData }) {
                   </div>
                 )}
                 <div className="input-group mb-3">
-                  <span className="input-group-text" id="basic-addon1">
+                  <span className="input-group-text">
                     <i className="fa fa-key"></i>
                   </span>
                   <input
-                    type="password"
+                    type={showPass ? "text" : "password"}
                     className="form-control"
                     placeholder="Enter your Password"
-                    {...register("password", {
-                      required: "Password is required",
-                    })}
+                    {...register("password", passwordValidation)}
                   />
+                  <span className="input-group-text">
+                    <i
+                      className={`fa-regular fa-eye${
+                        showPass ? "-slash" : ""
+                      }`}
+                      role="button"
+                      onClick={showPasswordHandler}
+                    ></i>
+                  </span>
                 </div>
                 {errors.password && (
                   <div className="alert alert-danger">

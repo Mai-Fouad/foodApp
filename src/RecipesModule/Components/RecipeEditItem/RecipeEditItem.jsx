@@ -53,7 +53,7 @@ export default function RecipeEditItem() {
     const convertedData = convertToFormData(data);
     try {
       const response = await axios.put(
-        `https://upskilling-egypt.com:443/api/v1/Recipe/${selectedRecipe?.id}`,
+        `https://upskilling-egypt.com:3006/api/v1/Recipe/${selectedRecipe?.id}`,
         convertedData,
         {
           headers: {
@@ -177,7 +177,7 @@ export default function RecipeEditItem() {
                 {selectedRecipe?.imagePath && (
                   <div className="selectedImg">
                     <img
-                      src={`https://upskilling-egypt.com:443/${selectedRecipe?.imagePath}`}
+                      src={`https://upskilling-egypt.com:3006/${selectedRecipe?.imagePath}`}
                       alt="selected image"
                       className="w-100"
                     />

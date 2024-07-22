@@ -1,18 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../../../assets/images/logo.png";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { userURLs } from "../../../lib/APIs";
+import {
+  countryValidation,
+  emailValidation,
+  passwordValidation,
+  phoneNumberValidation,
+  userNameValidation,
+} from "../../../lib/InputsValidator";
 
 export default function Register() {
+  const { registerAPI } = userURLs;
+
+  const [showPass, setShowPass] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm();
+
+  const password = watch("password");
+
+  const showPasswordHandler = () => {
+    setShowPass(!showPass);
+  };
 
   const convertToFormData = (data) => {
     console.log(data, "testData");
@@ -31,10 +53,7 @@ export default function Register() {
     const convertedData = convertToFormData(data);
     console.log(convertedData, "converted");
     try {
-      const response = await axios.post(
-        "https://upskilling-egypt.com:443/api/v1/Users/Register",
-        convertedData
-      );
+      const response = await axios.post(registerAPI, convertedData);
       navigate("/verify-user");
     } catch (error) {
       toast.error(error.response.data.message);
@@ -48,7 +67,7 @@ export default function Register() {
           <div className="col-md-8">
             <div className="login bg-white rounded-3 px-5 py-4">
               <div className="logo-container text-center">
-                <img src={logo} alt="food-logo" className="w-50 mb-3" />
+                <img src={logo} alt="food-logo" className="w-25 mb-3" />
               </div>
               <h4>Register</h4>
               <p className="text-muted">
@@ -65,9 +84,7 @@ export default function Register() {
                         type="text"
                         className="form-control"
                         placeholder="UserName"
-                        {...register("userName", {
-                          required: "UserName is required",
-                        })}
+                        {...register("userName", userNameValidation)}
                       />
                     </div>
                     {errors.userName && (
@@ -85,13 +102,7 @@ export default function Register() {
                         type="email"
                         className="form-control"
                         placeholder="Enter your E-mail"
-                        {...register("email", {
-                          required: "Email is required",
-                          pattern: {
-                            value: "^[^@]+@[^@]+.[^@]+$",
-                            message: "Email not valid",
-                          },
-                        })}
+                        {...register("email", emailValidation)}
                       />
                     </div>
                     {errors.email && (
@@ -111,9 +122,7 @@ export default function Register() {
                         type="text"
                         className="form-control"
                         placeholder="Country"
-                        {...register("country", {
-                          required: "Country is required",
-                        })}
+                        {...register("country", countryValidation)}
                       />
                     </div>
                     {errors.country && (
@@ -132,9 +141,7 @@ export default function Register() {
                         maxLength={11}
                         className="form-control"
                         placeholder="phoneNumber"
-                        {...register("phoneNumber", {
-                          required: "phoneNumber is required",
-                        })}
+                        {...register("phoneNumber", phoneNumberValidation)}
                       />
                     </div>
                     {errors.phoneNumber && (
@@ -152,13 +159,20 @@ export default function Register() {
                         <i className="fa-solid fa-key"></i>
                       </span>
                       <input
-                        type="password"
+                        type={showPass ? "text" : "password"}
                         className="form-control"
                         placeholder="Password"
-                        {...register("password", {
-                          required: "Password is required",
-                        })}
+                        {...register("password", passwordValidation)}
                       />
+                      <span className="input-group-text">
+                        <i
+                          className={`fa-regular fa-eye${
+                            showPass ? "-slash" : ""
+                          }`}
+                          role="button"
+                          onClick={showPasswordHandler}
+                        ></i>
+                      </span>
                     </div>
                     {errors.password && (
                       <div className="alert alert-danger py-1">
@@ -172,13 +186,25 @@ export default function Register() {
                         <i className="fa-solid fa-key"></i>
                       </span>
                       <input
-                        type="password"
+                        type={showPass ? "text" : "password"}
                         className="form-control"
                         placeholder="confirmPassword"
                         {...register("confirmPassword", {
-                          required: "confirmPassword is required",
+                          ...passwordValidation,
+                          validate: (value) =>
+                            value === password ||
+                            "Password does not match confirm password",
                         })}
                       />
+                      <span className="input-group-text">
+                        <i
+                          className={`fa-regular fa-eye${
+                            showPass ? "-slash" : ""
+                          }`}
+                          role="button"
+                          onClick={showPasswordHandler}
+                        ></i>
+                      </span>
                     </div>
                     {errors.confirmPassword && (
                       <div className="alert alert-danger py-1">

@@ -1,6 +1,8 @@
 .Auth-container {
-  background: url(./assets/images/bg-image.png);
+  background: url(./assets/images/bg-cover.jpeg);
   background-size: cover;
+  min-height: 100vh;
+  background-position: center;
 }
 
 .overlay {
@@ -12,6 +14,9 @@
 }
 .sidebar-container {
   height: 100vh !important;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 .sidebar-container .ps-sidebar-container {
@@ -69,4 +74,11 @@ input[type="file"]::file-selector-button:hover {
 
 .selectedImg {
   width: 100px;
+}
+
+@media only screen and (max-width: 768px) {
+  .contentContainer {
+    width: 80% !important;
+    margin-left: 40px;
+  }
 }
